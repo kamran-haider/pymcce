@@ -1,0 +1,27 @@
+package:
+  name: sstmap
+  version: 1.1.0
+
+source:
+  path: ../../
+
+requirements:
+  build:
+    - python >=2.7
+    - numpy >=1.11.3
+    - setuptools
+    - gcc
+
+  run:
+    - python >=2.7
+    - libgcc
+    - numpy
+    - scipy
+    - mdtraj
+    - parmed
+    - matplotlib
+
+about:
+  home: https://github.com/kamran-haider
+  license: GNU Lesser General Public License v2 or later (LGPLv2+)
+  summary: Python tools for analysis of water molecules in MD trajectories.
