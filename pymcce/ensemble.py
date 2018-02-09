@@ -28,16 +28,17 @@ class McceEnsemble(object):
 
         for f in dir_files:
             f = os.path.join(self.simulation_dir, f)
-            if f.endswith("head3.lst"):
-                self.head3_data, self.conf_list = self.parse_head3lst(self, f)
+            #if f.endswith("head3.lst"):
+            #    self.head3_data, self.conf_list = self.parse_head3lst(self, f)
 
     def parse_head3lst(self, head3lst):
         """
         """
-        conf_data =
-        conformer_list = []
-        with open(head3lst, "r") as h3:
-            for line in h3.readlines()[1:]:
-                data = line.split()
-                conformer_list.append(data[1])
-                conf_data = np.asarray([float(x) for x in data[2:-1]])
+        pass
+        #conf_data =
+        #conformer_list = []
+        #with open(head3lst, "r") as h3:
+        #    for line in h3.readlines()[1:]:
+        #        data = line.split()
+        #        conformer_list.append(data[1])
+        #        conf_data = np.asarray([float(x) for x in data[2:-1]])

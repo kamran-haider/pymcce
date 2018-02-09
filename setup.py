@@ -5,37 +5,16 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
-
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-
-requirements = [
-    # TODO: put package requirements here
-]
-
-setup_requirements = [
-    'pytest-runner',
-    # TODO(kamran-haider): put setup requirements (distutils extensions, etc.) here
-]
-
-test_requirements = [
-    'pytest',
-    # TODO: put package test requirements here
-]
 
 setup(
     name='pymcce',
     version='0.1.0',
     description="A suite of tools to analyze Monte Carlo simulations generated from MCCE.",
-    long_description=readme + '\n\n' + history,
     author="Kamran Haider",
     author_email='kamranhaider.mb@gmail.com',
     url='https://github.com/kamran-haider/pymcce',
     packages=find_packages(include=['pymcce']),
     include_package_data=True,
-    install_requires=requirements,
     license="MIT license",
     zip_safe=False,
     keywords='pymcce',
@@ -53,6 +32,4 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
     test_suite='tests',
-    tests_require=test_requirements,
-    setup_requires=setup_requirements,
 )
