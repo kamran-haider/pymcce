@@ -254,3 +254,17 @@ def initialize_grid(center, resolution, dimensions):
         v_count += 1
     return voxel_array
 
+
+def get_last_prot_at_index(pdb):
+    with open(pdb, "r") as f2:
+        l2 = f2.readlines()
+        i = 0
+        prot_last_at_index = 0
+        for l in l2:
+            if "EM" in l:
+                prot_last_at_index = i
+                break
+            i += 1
+        return prot_last_at_index + 1
+        # return len(l2)
+
