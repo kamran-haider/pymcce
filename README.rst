@@ -21,6 +21,7 @@ pymcce
 A suite of tools to analyze Monte Carlo simulations generated from MCCE.
 
 **`pymcce` is currently in its inception stage and under heavy development. It's code is going to be derived from `automate-mcce` and `mcce-microstate-analyzer`**
+
 * Free software: MIT license
 * Documentation: https://pymcce.readthedocs.io.
 
@@ -29,6 +30,9 @@ Features
 --------
 
 * TODO
+- Refactor MCCEEnsemble class
+
+
 
 Credits
 ---------
