@@ -1,19 +1,22 @@
 import os
+import struct
 import numpy as np
+import mdtraj as md
+
 
 HEAD3_HEADER = {'FL': 0, 'occ': 1, 'crg': 2, 'Em0': 3, 'pKa0': 4, 'ne': 5,
                 'nH': 6, 'vdw0': 7, 'vdw1': 8, 'tors': 9, 'epol': 10,
                 'dsolv': 11, 'extra': 12, 'history': 13}
 
 
-class McceEnsemble(object):
+class Simulation(object):
     """A class representing MCCE simulation data."""
 
     def __init__(self, ms_data_file, head3lst_file, fort38_file):
+
         self.ms_data_file = ms_data_file
         self.byte_indices = None
         self.total_microstates = 0
-        self.total_records = 0
         res_list = []
 
         with open(self.ms_data_file, "rb") as md:
@@ -62,7 +65,7 @@ class McceEnsemble(object):
 
         self.residue_data = residue_data
 
-    def generate_byte_indices(self, sample_frequency=100, filename=None):
+    def generate_byte_indices(self, sample_frequency, filename):
         """
         Generate byte indices
 
@@ -80,29 +83,27 @@ class McceEnsemble(object):
         rec_indices : list
             A list of the starting bytes for each record in the microstate data file
         """
-        if filename is None:
-            filename = self.ms_data_file
-
         start_byte = 4 + (8 * self.n_res)
         bytes_per_record = (self.n_res * 2) + 20
         file_size = os.path.getsize(filename)
         # n_records = (file_size - start_byte) / bytes_per_record
         rec_indices = list(range(start_byte, file_size, sample_frequency * bytes_per_record))
-        self.total_records = len(rec_indices)
-        self.byte_indices = rec_indices
+        return rec_indices
 
-    def parse_records(self):
+    def parse_trajectory(self, sample_frequency=100):
         """
         Parse ms.dat
         """
-        trajectory = np.zeros([self.total_records, self.n_res], dtype=int)
-        state_counts = np.zeros([self.total_records], dtype=int)
-        energies = np.zeros([self.total_records], dtype=float)
+        byte_indices = self.generate_byte_indices(sample_frequency, self.ms_data_file)
+        total_records = len(byte_indices)
+        trajectory = np.zeros([total_records, self.n_res], dtype=int)
+        state_counts = np.zeros([total_records], dtype=int)
+        energies = np.zeros([total_records], dtype=float)
         # print trajectory
         progress_counter = 0
         # print_progress_bar(progress_counter, self.total_records)
         with open(self.ms_data_file, "rb") as ms:
-            for index, record in enumerate(self.byte_indices):
+            for index, record in enumerate(byte_indices):
                 ms.seek(record)
                 bytes_conf_ids = ms.read(2 * self.n_res)
                 bytes_energies_1 = ms.read(8)
@@ -144,10 +145,7 @@ class McceEnsemble(object):
         self.structure = st
         print("Done.")
 
-    def calculate_water_dipoles(self):
-        charge_dict = {"O": -2.000, "1H": 1.000, "2H": 1.000}
-        chg = [-0.834, 0.417, 0.417]
-        # chg = [-2.0, 1.0, 1.0]
+    def calculate_water_dipoles(self, chg):
 
         v = np.array([0, 0, 1])
         for index, c in enumerate(self.conformer_data.keys()):

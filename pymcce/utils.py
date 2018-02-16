@@ -217,7 +217,7 @@ def initialize_grid(center, resolution, dimensions):
     # self.center = np.array(center,dtype=np.float_)
     # self.dims = np.array(dimensions)
     # self.spacing = np.array(resolution,dtype=np.float_)
-    print("Initializing ...")
+    print("Creating grid ...")
     center = np.array(center, dtype=np.float_)
     dims = np.array(dimensions, dtype=np.int_)
     spacing = np.array(resolution, dtype=np.float_)
@@ -225,7 +225,6 @@ def initialize_grid(center, resolution, dimensions):
     # set origin
     o = center - (0.5 * dims * spacing)
     origin = np.around(o, decimals=3)
-    print(origin)
     # set grid size (in terms of total points alog each axis)
     length = np.array(dims / spacing, dtype=np.float_)
     grid_size = np.ceil((length / spacing) + 1.0)
