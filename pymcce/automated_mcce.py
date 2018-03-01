@@ -139,12 +139,13 @@ class MCCEParams(object):
 
     def write_submitsh(self, destination_dir, run_name=""):
         submit_text = ["#!/bin/sh\n", "#$ -S /bin/sh\n", "#$ -N mcce\n", "#$ -cwd\n",
-                       "#$ -o run.log\n", "#$ -e error.log\n", self.mcce_directory + "mcce"]
+                       "#$ -o run.log\n", "#$ -e error.log\n", self.mcce_directory + "/mcce"]
         submit_text[2] = submit_text[2].replace("mcce", "mcce_" + run_name)
         submitsh = open("submit.sh", "w")
         for line in submit_text:
             submitsh.write(line)
         submitsh.close()
+
 
 
 def automated_run(input_dir, destination_dir, mcce_dir, local=False):

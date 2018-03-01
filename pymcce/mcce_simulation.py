@@ -156,6 +156,7 @@ class Simulation(object):
                 dp = pos.dot(chg)
                 # calculate projection
                 proj = np.multiply(dp.dot(v) / v.dot(v), v)
+
                 scaling_factor = dp.dot(v) / v.dot(v)
                 # print(index, scaling_factor)
                 # snapshot_st = msa.structure.atom_slice(conf_ids)
