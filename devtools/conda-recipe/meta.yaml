@@ -16,7 +16,6 @@ requirements:
     - scipy
     - mdtraj
     - parmed
-    - matplotlib
 
 about:
   home: https://github.com/kamran-haider

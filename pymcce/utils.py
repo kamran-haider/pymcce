@@ -2,6 +2,7 @@
 Utility module for functions that are frequently used.
 """
 import numpy as np
+import mdtraj as md
 
 
 class NeighborSearch(object):
@@ -267,3 +268,30 @@ def get_last_prot_at_index(pdb):
         return prot_last_at_index + 1
         # return len(l2)
 
+
+def get_ligand_center(ligand):
+    lig = md.load_pdb(ligand, no_boxchk=True)
+    com = np.zeros((lig.n_frames, 3))
+    masses = np.ones(lig.n_atoms)
+    masses /= masses.sum()
+    com[0, :] = lig.xyz[0, :].astype('float64').T.dot(masses)
+    grid_center = com[0, :]
+
+    return grid_center
+
+
+def assemble_solvated_structure(water_pdb, other_pdb, write_pdb, last_prot_index):
+    with open(water_pdb, "r") as f1:
+        with open(other_pdb, "r") as f2:
+            with open(write_pdb, "w") as f3:
+                wat_lines = f1.readlines()
+                l2 = f2.readlines()
+                prot_lines = l2[:last_prot_index-1]
+                mem_lines = l2[last_prot_index-1:]
+                #print(prot_lines[-1])
+                #print(wat_lines[0])
+                #print(mem_lines[0])
+                #print(mem_lines[-1])
+                all_lines = prot_lines + wat_lines + mem_lines
+                for l in all_lines:
+                    f3.write(l)

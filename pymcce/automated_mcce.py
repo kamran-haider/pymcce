@@ -141,7 +141,7 @@ class MCCEParams(object):
         submit_text = ["#!/bin/sh\n", "#$ -S /bin/sh\n", "#$ -N mcce\n", "#$ -cwd\n",
                        "#$ -o run.log\n", "#$ -e error.log\n", self.mcce_directory + "/mcce"]
         submit_text[2] = submit_text[2].replace("mcce", "mcce_" + run_name)
-        submitsh = open("submit.sh", "w")
+        submitsh = open(os.path.join(destination_dir, "submit.sh"), "w")
         for line in submit_text:
             submitsh.write(line)
         submitsh.close()
