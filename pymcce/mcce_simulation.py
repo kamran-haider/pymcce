@@ -17,6 +17,8 @@ class Simulation(object):
         self.ms_data_file = ms_data_file
         self.byte_indices = None
         self.total_microstates = 0
+       	self.fort38_by_id = {}
+		self.fort38_by_name = {}
         res_list = []
 
         with open(self.ms_data_file, "rb") as md:
@@ -64,6 +66,9 @@ class Simulation(object):
                     residue_data[res_key].append((k, self.conformer_data[k][0]))
 
         self.residue_data = residue_data
+
+        # To populate name-id and id-name dictionaries...
+        self.parse_fort38()
 
     def generate_byte_indices(self, sample_frequency, filename):
         """
@@ -180,3 +185,21 @@ class Simulation(object):
             break
             # with open(opp, "r") as o:
             #    data = o.readlines()
+
+	def parse_fort38(self):
+		with open(self.fort38_file, 'r') as fort38:
+			lines = fort38.readlines()[1:] # starting from the second line
+			for index, line in enumerate(lines):
+				data_id = np.array([str(line.split()[0]), float(line.split()[1])])
+				data_name = np.array([int(index+1), float(line.split()[1])])
+				self.fort38_by_id[int(index+1)] = data_id
+				self.fort38_by_name[str(line.split()[0])] = data_name
+				# two dictionaries have been populated. id to name is keyed by id and 
+				# has values in the form of [conformer name, energy] and name to id is keyed
+				# by name, and has values in the form of [id number, energy]
+
+	def retrieve_from_name(self, conf_name):
+		return int(self.fort38_by_name[conf_name][0])
+
+	def retrieve_from_id(self, conf_id):
+		return self.fort38_by_id[conf_id][0]
